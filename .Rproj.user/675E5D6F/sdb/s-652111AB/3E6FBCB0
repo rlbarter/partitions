@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "kdtree <- kdTree(iris[,-5], max.depth = 5)\n\nkdtree %>% filter(depth == 1) %>% select(depth, axis, cutpoint)\n\nb <- kdtree %>% filter(depth == 2)\n\na <- iris[,1] < 5.8\nnames(a) <- 1:150\n\n\nt(rbind(true.left = a, b[4:153]))\n",
+    "created" : 1476827022495.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "1601921151",
+    "id" : "3E6FBCB0",
+    "lastKnownWriteTime" : 3467807034886324230,
+    "last_content_update" : 1476827225805,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

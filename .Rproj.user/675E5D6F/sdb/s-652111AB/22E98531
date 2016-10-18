@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "\n#' Build a kd-tree.\n#'\n#' @param X A data frame whose columns correspond to the variables and whose\n#'          rows correspond to the data points.\n#' @param max.depth A number specifying the total depth of the tree.\n#' @return A data frame describing the nodes of the tree and which data points\n#'          are included in the node.\n#' @importFrom magrittr \"%>%\"\n#' @examples\n#' kdTree(iris[,-5], max.depth = 5)\n\nkdTree <- function(X, max.depth = 5) {\n\n  # initialize objects\n  depth <- 0\n  node <- list(left.child = NULL,\n               right.child = NULL)\n  # add an id column to keep track of which data points go where\n  X$id <- 1:nrow(X)\n\n  # results table\n  N <- nrow(X)\n  # initialize the results table\n  results <- data.frame(depth = depth, axis = NA, cutpoint = NA, t(rep(TRUE, N)))\n  colnames(results) <- c(\"depth\", \"axis\", \"cutpoint\", paste0(\"d\", 1:nrow(X)))\n\n  # run the recursive function to define the list of results tables\n  nested.list.results <- kdSplit(X, N, node, depth, max.depth)\n\n  clean.results <- nestedListToDataFrame(nested.list.results,\n                                         entry.length = N + 3)\n\n  return(clean.results)\n}\n\n\n\n\n#' A recursive nodesplitting function called in kdTree()\n#'\n#' @importFrom magrittr \"%>%\"\n\nkdSplit <- function(X, N, node, depth, max.depth) {\n  if (depth < max.depth) {\n\n    # go one layer deeper\n    depth <- depth + 1\n\n    # set the axis (ignoring the added id variable)\n    axis <- ((depth - 1) %% (ncol(X) - 1)) + 1\n\n    # identify the median along the specified axis from the parent node\n    cutpoint <- median(X[, axis])\n    # identify the data points that fall to the left of the median cutpoint\n    left.of.cutpoint <- X[, axis] < cutpoint\n\n    # tmp keeps track of which data points are present in this node\n    # it is a vector of TRUE/FALSE\n    tmp <- t(data.frame(1:N %in% X$id))\n    rownames(tmp) <- NULL\n    colnames(tmp) <- paste0(\"d\", 1:N)\n    # fill in the results table for this node\n    node$results <- data.frame(depth = depth,\n                               axis = axis,\n                               cutpoint = cutpoint,\n                               tmp)\n\n    # recursively call the function\n    node$left.child <- kdSplit(X[left.of.cutpoint, ], N,\n                               node, depth, max.depth)\n    node$right.child <- kdSplit(X[!left.of.cutpoint, ], N,\n                                node, depth, max.depth)\n\n    return(node)\n  }\n}\n\n",
+    "created" : 1476824837497.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "162691430",
+    "id" : "22E98531",
+    "lastKnownWriteTime" : 1476827255,
+    "last_content_update" : 1476827255855,
+    "path" : "~/Google Drive/Berkeley PhD/Packages/partitions/R/kd-tree.R",
+    "project_path" : "R/kd-tree.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

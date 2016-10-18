@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "\n#' Convert a nested list from kdTree() to a sensible data frame\n#'\n#' @param nested.list A nested list created from kdTree()\n#' @param entry.length The number of rows of each individual data frame\n#     (typically equal to nrow(X) + 3).\n#' @importFrom magrittr \"%>%\"\n\nnestedListToDataFrame <- function(nested.list, entry.length) {\n\n\n  # convert the nested list into one long vector\n  long.df <- unlist(nested.list)\n  # split up into a single-layer list based on each node\n  tmp.list <- split(long.df, rep(1:(length(long.df) / entry.length), each = entry.length))\n  # join the data frames together into a long data frame\n  df <- do.call(rbind, tmp.list)\n  # fix the column names\n  colnames(df) <- c(\"depth\", \"axis\", \"cutpoint\", paste0(\"d\", 1:(entry.length - 3)))\n  df <- df %>% as.data.frame %>% dplyr::arrange(depth, axis)\n  return(df)\n}\n",
+    "created" : 1476824869503.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "480615070",
+    "id" : "AECCA3DD",
+    "lastKnownWriteTime" : 1476825695,
+    "last_content_update" : 1476825695255,
+    "path" : "~/Google Drive/Berkeley PhD/Packages/partitions/R/utils.R",
+    "project_path" : "R/utils.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

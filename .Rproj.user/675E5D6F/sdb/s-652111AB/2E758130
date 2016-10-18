@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "library(testthat)\ncontext(\"Tree splits\")\n\nkdtree <- kdTree(iris[,-5], max.depth = 5)\n\ntest_that(\"kdtree is the correct dimension\", {\n  expect_equal(nrow(kdtree), 2^max.depth - 1)\n})\n\ntest_that(\"each depth is repeated the correct number of times\", {\n  expect_equal(sum(kdtree$depth == 2), 2^1)\n  expect_equal(sum(kdtree$depth == 3), 2^2)\n  expect_equal(sum(kdtree$depth == 4), 2^3)\n})\n\ntest_that(\"the largest axis is equal to the number of variables\", {\n  expect_equal(max(kdtree$axis), ncol(iris[,-5]))\n})\n\ntest_that(\"each node completely splits the data\", {\n  children <- dplyr::filter(kdtree, depth == 2, axis == 2)\n  expected.vector <- rep(1, 150)\n  names(expected.vector) <- paste0(\"d\", 1:150)\n  expect_identical(sapply(children, sum)[4:153], expected.vector)\n\n  children <- dplyr::filter(kdtree, depth == 3, axis == 3)\n  expected.vector <- rep(1, 150)\n  names(expected.vector) <- paste0(\"d\", 1:150)\n  expect_identical(sapply(children, sum)[4:153], expected.vector)\n})\n\ntest_that(\"every data point falls in EXACTLY ONE terminal node\", {\n  terminal.nodes <- dplyr::filter(kdtree, depth == 5)\n  expected.vector <- rep(1, 150)\n  names(expected.vector) <- paste0(\"d\", 1:150)\n  expect_identical(sapply(terminal.nodes, sum)[4:153], expected.vector)\n})\n",
+    "created" : 1476826359361.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "524930702",
+    "id" : "2E758130",
+    "lastKnownWriteTime" : 1476827319,
+    "last_content_update" : 1476827319340,
+    "path" : "~/Google Drive/Berkeley PhD/Packages/partitions/tests/testthat/test-kd-tree.R",
+    "project_path" : "tests/testthat/test-kd-tree.R",
+    "properties" : {
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
