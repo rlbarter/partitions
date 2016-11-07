@@ -7,6 +7,7 @@
 #' @return A data frame describing the nodes of the tree and which data points
 #'          are included in the node.
 #' @importFrom magrittr "%>%"
+#' @export
 #' @examples
 #' kdTree(iris[,-5], max.depth = 5)
 

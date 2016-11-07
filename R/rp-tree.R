@@ -21,9 +21,16 @@ rpTree <- function(X, max.depth = 5) {
 
   # results table
   N <- nrow(X)
+  # depth is the depth of the tree
   # initialize the results table
-  results <- data.frame(depth = depth, axis = NA, cutpoint = NA, t(rep(TRUE, N)))
-  # axis can be the angle from 0 to 360 relative to 0
+  # axis is the random direction selected from  the unit sphere.
+  # cutpoint is the point on the random axis where the median lies
+  # the remaining variables are binary values describing whether or not 
+  #   the data point lies in the partition described by the depth, axis, 
+  #   angle and cutpoint.
+  results <- data.frame(depth = depth, axis = NA, 
+                        cutpoint = NA, 
+                        t(rep(TRUE, N)))
   colnames(results) <- c("depth", "axis", "cutpoint", paste0("d", 1:nrow(X)))
 
   # run the recursive function to define the list of results tables
@@ -48,16 +55,17 @@ rpSplit <- function(X, N, node, depth, max.depth) {
     # go one layer deeper
     depth <- depth + 1
 
-    # set the axis angle
-    axis <- runif(1, 0, 180)
+    # Obtain a random point on the unit sphere
+    U <- runif(ncol(X), -1, 1)
+    U <- U / sqrt(sum(U^2))
 
     # identify the median along the specified axis from the parent node
-    cutpoint <- median(X[, axis])
-
-    ### TODO : define the hyperplant that goes through the median cutpoint (with jitter) and has angle 'axis'
+    projections <- (as.matrix(X) %*% matrix(U)) %*% U
+    std.projection <- apply(projection , 1, function(x) x / sqrt(sum(x^2)))
+    cutpoint <- 
 
     ### TODO : idenitfy which points fall on one side of the random hyperplane
-    # left.of.cutpoint <- ?
+    left.of.cutpoint <- (projections %*% matrix(U)) < cutpoint
 
     # tmp keeps track of which data points are present in this node
     # it is a vector of TRUE/FALSE
